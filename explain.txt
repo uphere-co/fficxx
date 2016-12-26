@@ -1,0 +1,141 @@
+0000000000000000 V _ZTVN3fmt17BasicMemoryWriterIcSaIcEEE
+0000000000000000 V _ZTVN3fmt8internal12MemoryBufferIcLm500ESaIcEEE
+
+----------------
+#fmt::BasicWriter - z encoding
+C Shim # fmt_BasicWriter (  )
+C namespace..
+haskell : C++ class, class pointer, class reference ?
+fmt_BasicWriter ( A* p     ) { (*p).BasicWriter, p->BasicWriter pointer
+Foreign.Ptr (Ptr)
+Ptr  = pointer
+CInt, CDouble, CChar, CWord  --> int, double, char..
+Ptr CInt, Ptr CDouble, Ptr CChar..
+Ptr a = void*
+Ptr () = void*
+Ptr A = void*
+
+foreign import ccall unsafe "funcname" c_funcname :: Ptr A -> IO ()
+
+c_funcname :: Ptr A -> IO ()
+
+c_funcname = (void funcname (void*))
+
+f :: CInt -> IO CInt
+
+int f ( int)
+
+f :: CInt -> IO (Ptr CInt)
+int* f( int )
+
+Ptr (Ptr CInt) = int**
+
+Ptr A = (void*) <- A*
+
+
+Ptr A   : castPtr :: Ptr a -> Ptr b
+
+
+Raw level
+---
+data RawA
+
+newtype A = A (Ptr RawA)
+                      newtype -> Ptr RawA
+foreign .... c_func :: A -> IO ()
+void f (void*)
+
+C shim :
+foreign import ... "A_method1" c_A_method1 :: A -> ...
+
+----
+Inheritance
+
+A.method
+
+A_method objA args
+
+
+B < A
+(B::method)
+B_method objB
+
+(A::method)
+A_method objA
+
+High level
+
+A a
+A b
+a.add( b )
+
+A a
+B b
+a.add( b )
+
+# due to  subtyping, C++ class is not a single type. 
+
+class IA a where
+  method :: (IA b) => b -> Arg -> IO Ret
+
+class (IA b) => IB b where
+  method2 :: Arg -> IO Ret
+  
+instance IA A where
+  method = xformfunc c_A_method 
+
+instance IA B where
+  method = c_B_method
+
+instance IB B where
+  method2 = c_B_method2
+
+a <- newA
+b <- newB
+
+method a
+method b
+method2 b 
+
+
+------------------------------
+
+$ cabal sandbox init
+$ cabal sandbox add-source (cabal pkg directory)
+$ cabal install (packagename)
+$ cabal exec -- (cli command )
+
+in our session, on fficxx/fficxx/sample/snappy-generator directory, we ran
+$ cabal sandbox add-source ../../      
+$ cabal sandbox add-source ../../../fficxx-runtime
+$ cabal install fficxx
+$ cabal exec -- ghc SnappyGen.hs
+
+-- after snappy code was generated
+$ cabal sandbox add-source Snappy
+$ cabal install Snappy
+
+
+
+Snappy.Source.RawType    raw level       (type defin)
+              FFI        raw level       (ffi)
+	      Interface      high level (class define)
+	      Implementation  high level  (instance define)
+
+
+fficxx-runtime
+
+------
+nlp-prototype
+
+nix-shell query/shell.nix
+
+
+
+
+
+------
+Discussion point: 
+private copy constructor (ex: snappy Source )
+
+libc++ / libstdc++ : how to support both of them correctly
